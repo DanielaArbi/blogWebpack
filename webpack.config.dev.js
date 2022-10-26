@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv= require('dotenv-webpack');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: './src/index.js',               //elemnto inicial de la app
@@ -13,7 +13,7 @@ module.exports = {
         assetModuleFilename : 'assets/images/[hash][ext][query]'
     },
     mode : 'development',  //este config es solo para dev
-    watch :true,           //para estar a la escucha de los cambios
+    devtool: 'source-map', //nos genera un mapa del codigo en formato json
     resolve: {
         extensions: ['.js'] ,
         alias :{//se usa alias para evitar el ././ en las rutas
@@ -77,6 +77,16 @@ module.exports = {
             ]
         }),
         new Dotenv(),
+        new BundleAnalyzerPlugin(),
     ],
+    devServer:{       //con esto establezco un servidor
+        static: {
+            directory: path.join(__dirname, 'dist'),
+          },
+        compress : true,
+        historyApiFallback : true,
+        port : 9000,
+        open : true,
+    },
    
 }
